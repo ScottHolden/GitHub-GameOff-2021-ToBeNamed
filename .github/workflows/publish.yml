@@ -1,0 +1,36 @@
+name: Publish GitHub Page
+
+on:
+  push:
+    branches:
+    - main
+    paths-ignore:
+    - '*.md'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+        
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.100-rc.2.21505.57
+
+    - name: Install workload
+      run: dotnet workload install wasm-tools 
+
+    - name: Publish app
+      run: dotnet publish BugTesting/BugTesting.csproj -c Release
+
+    - name: GitHub Pages
+      if: success()
+      uses: crazy-max/ghaction-github-pages@v2.2.0
+      with:
+        target_branch: gh-pages
+        build_dir: BugTesting/bin/Release/net6.0/publish/wwwroot
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
