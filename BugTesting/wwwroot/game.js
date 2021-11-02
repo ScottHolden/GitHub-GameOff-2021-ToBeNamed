@@ -23,7 +23,4 @@
 	const gl = canvas[0].getContext("webgl2", contextAttributes);
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
 	gl.clear(gl.COLOR_BUFFER_BIT);
-	window.gl = gl;
-	console.log(gl);
-	crash;
 }
